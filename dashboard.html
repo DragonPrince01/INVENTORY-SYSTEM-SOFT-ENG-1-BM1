@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockSense Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-item active" onclick="switchTab('inventory', this)">Inventory</div>
+        <div class="nav-item" onclick="switchTab('history', this)">Log History</div>
+        <button onclick="logout()">Logout</button>
+        <input type="checkbox" id="checkbox"> Dark Mode
+    </nav>
+
+    <section id="view-inventory" class="view-section">
+        <h3>Critical Stock Alerts</h3>
+        <div id="tracker-grid" class="grid-container"></div>
+
+        <h3>Full Inventory</h3>
+        <input type="text" onkeyup="handleSearch(this.value)" placeholder="Search items...">
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Status</th>
+                    <th>Qty</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="inventory-list"></tbody>
+        </table>
+    </section>
+
+    <section id="view-history" class="view-section" style="display:none;">
+        <h3>Transaction Logs</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>User</th>
+                    <th>Item</th>
+                    <th>Change</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody id="history-list"></tbody>
+        </table>
+    </section>
+
+    <div id="transModal" style="display:none;" class="modal">
+        <div class="modal-content">
+            <h4 id="trans-title">Transaction</h4>
+            <form id="transForm">
+                <input type="hidden" id="trans-id">
+                <input type="number" id="trans-change">
+                <div id="out-logic">
+                    <input type="text" id="destination" placeholder="Destination">
+                    <input type="text" id="purpose" placeholder="Purpose">
+                </div>
+                <button type="submit">Confirm</button>
+                <button type="button" onclick="closeTransModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
