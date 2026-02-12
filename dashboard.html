@@ -4,64 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockSense Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <nav>
-        <div class="nav-item active" onclick="switchTab('inventory', this)">Inventory</div>
-        <div class="nav-item" onclick="switchTab('history', this)">Log History</div>
-        <button onclick="logout()">Logout</button>
-        <input type="checkbox" id="checkbox"> Dark Mode
-    </nav>
+    <div class="sidebar">
+        <div class="brand">
+            <img src="STOCKSENCE LOGO.png" alt="Logo" style="width:100%; height:auto; mix-blend-mode:screen;">
+        </div>
+        <nav class="nav-links">
+            <a href="#" class="nav-item active" onclick="switchTab('tracker', this)"><i class="fas fa-satellite-dish"></i> Tracker</a>
+            <a href="#" class="nav-item" onclick="switchTab('log-stocks', this)"><i class="fas fa-boxes"></i> Log Stocks</a>
+            <a href="#" class="nav-item" onclick="switchTab('history', this)"><i class="fas fa-history"></i> History</a>
+        </nav>
+        <div class="logout-section">
+            <a href="#" onclick="logout()" class="nav-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
 
-    <section id="view-inventory" class="view-section">
-        <h3>Critical Stock Alerts</h3>
-        <div id="tracker-grid" class="grid-container"></div>
+    <div class="main-content">
+        <header>
+            <h2 id="page-title">Tracker</h2>
+            <div class="header-actions">
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider round"><i class="fas fa-sun"></i><i class="fas fa-moon"></i></div>
+                    </label>
+                </div>
+            </div>
+        </header>
 
-        <h3>Full Inventory</h3>
-        <input type="text" onkeyup="handleSearch(this.value)" placeholder="Search items...">
-        <table>
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Status</th>
-                    <th>Qty</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="inventory-list"></tbody>
-        </table>
-    </section>
+        <div id="view-tracker" class="view-section active">
+            <div class="section-header-line"><h3>Low Stock Alerts</h3><div class="line"></div></div>
+            <div class="cards-grid" id="tracker-grid">
+                </div>
+        </div>
 
-    <section id="view-history" class="view-section" style="display:none;">
-        <h3>Transaction Logs</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>User</th>
-                    <th>Item</th>
-                    <th>Change</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody id="history-list"></tbody>
-        </table>
-    </section>
+        <div id="view-log-stocks" class="view-section" style="display: none;">
+            <h3>Inventory Management</h3>
+            <div class="search-bar-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by Item, Code, or Vendor..." onkeyup="handleSearch(this.value)">
+            </div>
+            <div class="inventory-table-container">
+                <table class="stock-table">
+                    <thead><tr><th>Item Details</th><th>Status</th><th>Stock</th><th>Quick Actions</th></tr></thead>
+                    <tbody id="inventory-list">
+                        </tbody>
+                </table>
+            </div>
+        </div>
 
-    <div id="transModal" style="display:none;" class="modal">
+        <div id="view-history" class="view-section" style="display: none;">
+            <h3>Transaction Log</h3>
+            <table class="history-table">
+                <thead><tr><th>Time</th><th>User</th><th>Item</th><th>Action</th><th>Destination / Purpose</th></tr></thead>
+                <tbody id="history-list">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="transModal" class="modal">
         <div class="modal-content">
-            <h4 id="trans-title">Transaction</h4>
+            <span class="close" onclick="closeTransModal()">&times;</span>
+            <h3 id="trans-title">Update Stock</h3>
             <form id="transForm">
                 <input type="hidden" id="trans-id">
-                <input type="number" id="trans-change">
+                <input type="hidden" id="trans-change">
+                
                 <div id="out-logic">
-                    <input type="text" id="destination" placeholder="Destination">
-                    <input type="text" id="purpose" placeholder="Purpose">
+                    <p class="modal-subtitle">Traceability Required</p>
+                    <div class="form-group">
+                        <label>Destination / Recipient</label>
+                        <input type="text" id="destination" placeholder="e.g., Warehouse B">
+                    </div>
+                    <div class="form-group">
+                        <label>Purpose / Work Order</label>
+                        <input type="text" id="purpose" placeholder="e.g., WO-2026-88">
+                    </div>
                 </div>
-                <button type="submit">Confirm</button>
-                <button type="button" onclick="closeTransModal()">Cancel</button>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeTransModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Confirm</button>
+                </div>
             </form>
         </div>
     </div>
